@@ -5,19 +5,15 @@ import { useGameStore } from '../game/gameStore.js';
 
 export default function TouchControls() {
   const joystickRef = useRef(null);
-  const lookAreaRef = useRef(null);
   const thumbRef = useRef(null);
   const joystickTouchId = useRef(null);
-  const lookTouchId = useRef(null);
   const joystickCenter = useRef({ x: 0, y: 0 });
-  const lookStart = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     const joystick = joystickRef.current;
-    const lookArea = lookAreaRef.current;
-    if (!joystick || !lookArea) return;
+    if (!joystick) return;
 
-    const onJoystickStart = (e) => {
+    const onStart = (e) => {
       e.preventDefault();
       const touch = e.changedTouches[0];
       joystickTouchId.current = touch.identifier;
@@ -28,7 +24,7 @@ export default function TouchControls() {
       };
     };
 
-    const onJoystickMove = (e) => {
+    const onMove = (e) => {
       e.preventDefault();
       for (const touch of e.touches) {
         if (touch.identifier !== joystickTouchId.current) continue;
@@ -54,7 +50,7 @@ export default function TouchControls() {
       }
     };
 
-    const onJoystickEnd = (e) => {
+    const onEnd = (e) => {
       e.preventDefault();
       for (const touch of e.changedTouches) {
         if (touch.identifier !== joystickTouchId.current) continue;
@@ -67,50 +63,16 @@ export default function TouchControls() {
       }
     };
 
-    const onLookStart = (e) => {
-      if (lookTouchId.current !== null) return;
-      const touch = e.changedTouches[0];
-      lookTouchId.current = touch.identifier;
-      lookStart.current = { x: touch.clientX, y: touch.clientY };
-    };
-
-    const onLookMove = (e) => {
-      for (const touch of e.touches) {
-        if (touch.identifier !== lookTouchId.current) continue;
-        const dx = touch.clientX - lookStart.current.x;
-        const dy = touch.clientY - lookStart.current.y;
-        inputState.mouseDX += dx * 0.4;
-        inputState.mouseDY += dy * 0.4;
-        lookStart.current = { x: touch.clientX, y: touch.clientY };
-      }
-    };
-
-    const onLookEnd = (e) => {
-      for (const touch of e.changedTouches) {
-        if (touch.identifier === lookTouchId.current) {
-          lookTouchId.current = null;
-        }
-      }
-    };
-
-    joystick.addEventListener('touchstart', onJoystickStart, { passive: false });
-    joystick.addEventListener('touchmove', onJoystickMove, { passive: false });
-    joystick.addEventListener('touchend', onJoystickEnd, { passive: false });
-    joystick.addEventListener('touchcancel', onJoystickEnd, { passive: false });
-    lookArea.addEventListener('touchstart', onLookStart, { passive: false });
-    lookArea.addEventListener('touchmove', onLookMove, { passive: false });
-    lookArea.addEventListener('touchend', onLookEnd, { passive: false });
-    lookArea.addEventListener('touchcancel', onLookEnd, { passive: false });
+    joystick.addEventListener('touchstart', onStart, { passive: false });
+    joystick.addEventListener('touchmove', onMove, { passive: false });
+    joystick.addEventListener('touchend', onEnd, { passive: false });
+    joystick.addEventListener('touchcancel', onEnd, { passive: false });
 
     return () => {
-      joystick.removeEventListener('touchstart', onJoystickStart);
-      joystick.removeEventListener('touchmove', onJoystickMove);
-      joystick.removeEventListener('touchend', onJoystickEnd);
-      joystick.removeEventListener('touchcancel', onJoystickEnd);
-      lookArea.removeEventListener('touchstart', onLookStart);
-      lookArea.removeEventListener('touchmove', onLookMove);
-      lookArea.removeEventListener('touchend', onLookEnd);
-      lookArea.removeEventListener('touchcancel', onLookEnd);
+      joystick.removeEventListener('touchstart', onStart);
+      joystick.removeEventListener('touchmove', onMove);
+      joystick.removeEventListener('touchend', onEnd);
+      joystick.removeEventListener('touchcancel', onEnd);
     };
   }, []);
 
@@ -123,7 +85,6 @@ export default function TouchControls() {
 
   return (
     <div className="touch-controls">
-      <div className="look-area" ref={lookAreaRef} />
       <div className="joystick-base" ref={joystickRef}>
         <div className="joystick-thumb" ref={thumbRef} />
       </div>

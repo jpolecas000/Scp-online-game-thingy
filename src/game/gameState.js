@@ -24,7 +24,7 @@ export const gameState = {
   playerFaction: null,
   player: {
     x: 0, z: 0,
-    yaw: 0, pitch: 0,
+    facing: 0,
     health: 100,
     vx: 0, vz: 0,
   },
@@ -63,8 +63,7 @@ export function initGameState(playerFactionId) {
   const [px, pz] = gridToWorld(spawnCell.col, spawnCell.row);
   gameState.player.x = px;
   gameState.player.z = pz;
-  gameState.player.yaw = 0;
-  gameState.player.pitch = 0;
+  gameState.player.facing = 0;
   gameState.player.health = 100;
   gameState.player.vx = 0;
   gameState.player.vz = 0;
@@ -316,14 +315,8 @@ export function updateGame(dt, inputState) {
       mz *= 0.707;
     }
 
-    // Rotate by yaw
-    const cos = Math.cos(p.yaw);
-    const sin = Math.sin(p.yaw);
-    const wx = mx * cos + mz * sin;
-    const wz = mz * cos - mx * sin;
-
-    const newX = p.x + wx * PLAYER_SPEED * dt;
-    const newZ = p.z + wz * PLAYER_SPEED * dt;
+    const newX = p.x + mx * PLAYER_SPEED * dt;
+    const newZ = p.z + mz * PLAYER_SPEED * dt;
 
     // Collision: per-axis
     const [ncx, ncz] = [Math.floor(newX / CELL_SIZE), Math.floor(p.z / CELL_SIZE)];
@@ -335,11 +328,10 @@ export function updateGame(dt, inputState) {
       p.z = newZ;
     }
 
-    p.yaw -= inputState.mouseDX * 0.0025;
-    p.pitch -= inputState.mouseDY * 0.0025;
-    p.pitch = Math.max(-Math.PI / 2 + 0.1, Math.min(Math.PI / 2 - 0.1, p.pitch));
-    inputState.mouseDX = 0;
-    inputState.mouseDY = 0;
+    // Update facing direction for 2D top-down movement
+    if (mx !== 0 || mz !== 0) {
+      p.facing = Math.atan2(mz, mx);
+    }
   }
 
   // --- Pathfinding ---

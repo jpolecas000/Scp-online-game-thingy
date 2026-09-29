@@ -4,6 +4,4 @@ export const inputState = {
   backward: false,
   left: false,
   right: false,
-  mouseDX: 0,
-  mouseDY: 0,
 };
