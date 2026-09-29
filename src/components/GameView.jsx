@@ -8,14 +8,20 @@ import HUD from './HUD.jsx';
 import DialogueUI from './DialogueUI.jsx';
 import Minimap from './Minimap.jsx';
 import EventLog from './EventLog.jsx';
+import TouchControls from './TouchControls.jsx';
 
 export default function GameView() {
   const containerRef = useRef(null);
   const ePressedRef = useRef(false);
   const [pointerLocked, setPointerLocked] = useState(false);
+  const [isTouch, setIsTouch] = useState(false);
 
   const activeDialogue = useGameStore(s => s.activeDialogue);
   const backToFactionSelect = useGameStore(s => s.backToFactionSelect);
+
+  useEffect(() => {
+setIsTouch(window.matchMedia?.('(pointer: coarse)')?.matches ?? false);
+  }, []);
 
   useEffect(() => {
     const onKeyDown = (e) => {
@@ -29,13 +35,11 @@ export default function GameView() {
           if (!ePressedRef.current && !store.activeDialogue && gameState.nearbyNPCId) {
             ePressedRef.current = true;
             store.startDialogue();
-            document.exitPointerLock();
+            if (!isTouch) document.exitPointerLock();
           }
           break;
         case 'Escape':
-          if (store.activeDialogue) {
-            store.endDialogue();
-          }
+          if (store.activeDialogue) store.endDialogue();
           break;
       }
     };
@@ -62,6 +66,7 @@ export default function GameView() {
     };
 
     const onCanvasClick = () => {
+      if (isTouch) return;
       const store = useGameStore.getState();
       if (!store.activeDialogue && !document.pointerLockElement) {
         containerRef.current?.requestPointerLock();
@@ -83,7 +88,7 @@ export default function GameView() {
       document.removeEventListener('pointerlockchange', onPointerLockChange);
       if (container) container.removeEventListener('click', onCanvasClick);
     };
-  }, []);
+  }, [isTouch]);
 
   return (
     <div className="game-container" ref={containerRef}>
@@ -94,12 +99,9 @@ export default function GameView() {
       <DialogueUI />
       <Minimap />
       <EventLog />
-      <button className="back-btn" onClick={backToFactionSelect} style={{
-        position: 'absolute', top: '16px', right: '200px', zIndex: 30,
-        background: 'rgba(0,0,0,0.7)', border: '1px solid #444', borderRadius: '6px',
-        padding: '6px 12px', color: '#aaa', fontSize: '11px', cursor: 'pointer', pointerEvents: 'auto',
-      }}>← Change Faction</button>
-      {!pointerLocked && !activeDialogue && (
+      <button className="back-btn" onClick={backToFactionSelect}>← Change Faction</button>
+      {isTouch && !activeDialogue && <TouchControls />}
+      {!isTouch && !pointerLocked && !activeDialogue && (
         <div className="click-to-play" onClick={() => containerRef.current?.requestPointerLock()}>
           <div className="click-to-play-content">
             <h2>CLICK TO PLAY</h2>

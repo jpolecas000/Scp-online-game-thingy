@@ -126,9 +126,11 @@
 }
 
 .game-container {
-  width: 100%;
-  height: 100%;
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: #000;
 }
 
@@ -477,6 +479,7 @@
   border: 1px solid #444;
   border-radius: 8px;
   overflow: hidden;
+  z-index: 10;
 }
 
 .minimap-container canvas {
@@ -532,11 +535,110 @@
   to { transform: translateX(0); opacity: 1; }
 }
 
+/* === Back Button === */
+.back-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 30;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid #444;
+  border-radius: 6px;
+  padding: 6px 12px;
+  color: #aaa;
+  font-size: 11px;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+/* === Touch Controls === */
+.touch-controls {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.touch-controls .look-area {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: auto;
+  z-index: 1;
+  touch-action: none;
+}
+
+.touch-controls .joystick-base {
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  pointer-events: auto;
+  z-index: 2;
+  touch-action: none;
+}
+
+.touch-controls .joystick-thumb {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  margin: -20px 0 0 -20px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+.touch-controls .interact-btn {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(230, 57, 70, 0.5);
+  border: 2px solid rgba(230, 57, 70, 0.7);
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  pointer-events: auto;
+  z-index: 3;
+  cursor: pointer;
+  touch-action: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* === Mobile / Tablet === */
 @media (max-width: 820px) {
   .faction-select-header h1 { font-size: 20px; }
-  .faction-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+  .faction-select-header p { font-size: 11px; }
+  .faction-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
   .faction-card-body p { font-size: 11px; }
-  .minimap-container { width: 120px; height: 120px; }
+  .faction-card-body h3 { font-size: 13px; }
+  .minimap-container { width: 120px; height: 120px; bottom: 100px; }
   .objectives-panel { max-width: 200px; }
+  .back-btn { top: 8px; right: 8px; font-size: 10px; padding: 4px 8px; }
+  .hud-top-left { top: 8px; left: 8px; }
+  .faction-badge { padding: 4px 8px; }
+  .faction-badge span { font-size: 11px; }
+  .health-bar { padding: 4px 8px; }
+  .health-bar-fill { width: 80px; }
+  .dialogue-ui { padding: 16px 16px 16px; }
+  .dialogue-text { font-size: 13px; }
+  .dialogue-option { padding: 12px 16px; font-size: 13px; }
+  .interact-btn { bottom: 160px; right: 16px; width: 50px; height: 50px; font-size: 18px; }
+  .joystick-base { bottom: 20px; left: 20px; width: 80px; height: 80px; }
+  .joystick-thumb { width: 32px; height: 32px; margin: -16px 0 0 -16px; }
+  .event-log { max-width: 280px; }
+  .event-notification h4 { font-size: 11px; }
+  .event-notification p { font-size: 10px; }
+  .breach-alert { padding: 8px 16px; }
+  .breach-alert h3 { font-size: 12px; }
+  .breach-alert p { font-size: 10px; }
 }

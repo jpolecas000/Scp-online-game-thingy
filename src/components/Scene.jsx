@@ -6,6 +6,7 @@ import { useGameStore } from '../game/gameStore.js';
 import { generateFacility, CELL_SIZE, WALL_HEIGHT, GRID_SIZE } from '../game/facility.js';
 import { inputState } from '../game/inputState.js';
 import Facility3D from './Facility3D.jsx';
+import SCPMarkers from './SCPMarkers.jsx';
 
 const ZONE_COLORS = {
   'class-d': '#d4a017',
@@ -124,6 +125,7 @@ export default function Scene() {
       ))}
 
       <Facility3D facility={facility} />
+      <SCPMarkers />
 
       {/* NPC bodies */}
       <instancedMesh ref={npcBodyRef} args={[undefined, undefined, npcCount]} frustumCulled={false}>

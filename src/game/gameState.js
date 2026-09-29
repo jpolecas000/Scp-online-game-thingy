@@ -105,12 +105,17 @@ export function initGameState(playerFactionId) {
     }
   }
 
-  // Initialize SCPs
-  gameState.scps = SCPS.map(scp => ({
-    ...scp,
-    contained: true,
-    breachProgress: 0,
-  }));
+  // Initialize SCPs with world positions
+  gameState.scps = SCPS.map(scp => {
+    const [worldX, worldZ] = gridToWorld(scp.position.col, scp.position.row);
+    return {
+      ...scp,
+      contained: true,
+      breachProgress: 0,
+      worldX,
+      worldZ,
+    };
+  });
 
   gameState.time = 0;
   gameState.breachActive = false;
@@ -331,7 +336,7 @@ export function updateGame(dt, inputState) {
     }
 
     p.yaw -= inputState.mouseDX * 0.0025;
-    p.pitch += inputState.mouseDY * 0.0025;
+    p.pitch -= inputState.mouseDY * 0.0025;
     p.pitch = Math.max(-Math.PI / 2 + 0.1, Math.min(Math.PI / 2 - 0.1, p.pitch));
     inputState.mouseDX = 0;
     inputState.mouseDY = 0;
@@ -350,27 +355,29 @@ export function updateGame(dt, inputState) {
     updateSCP(scp, dt);
   }
 
-  // --- Breach/event timer ---
-  if (gameState.breachActive) {
-    gameState.breachTimer += dt;
+  // --- Event/breach timer ---
+  if (gameState.activeEvent) {
     gameState.eventTimer -= dt;
+    if (gameState.breachActive) gameState.breachTimer += dt;
     if (gameState.eventTimer <= 0) {
-      // End breach
-      gameState.breachActive = false;
-      gameState.breachTimer = 0;
-      const scp = gameState.scps.find(s => s.id === gameState.breachSCPId);
-      if (scp) {
-        scp.contained = true;
-        scp.breachProgress = 0;
+      // End event
+      if (gameState.breachActive) {
+        const scp = gameState.scps.find(s => s.id === gameState.breachSCPId);
+        if (scp) {
+          scp.contained = true;
+          scp.breachProgress = 0;
+        }
+        gameState.breachActive = false;
+        gameState.breachTimer = 0;
+        gameState.breachSCPId = null;
+        gameState.breachNPCName = null;
       }
-      gameState.breachSCPId = null;
-      gameState.breachNPCName = null;
       gameState.activeEvent = null;
       gameState.nextBreachTime = gameState.time + BREACH_INTERVAL_MIN + Math.random() * (BREACH_INTERVAL_MAX - BREACH_INTERVAL_MIN);
       gameState.notifications.push({
         id: Date.now(),
         title: 'ALL CLEAR',
-        description: 'Containment breach has been resolved. All SCPs are re-contained. Facility operations returning to normal.',
+        description: 'The situation has been resolved. Facility operations returning to normal.',
         timestamp: gameState.time,
       });
     }

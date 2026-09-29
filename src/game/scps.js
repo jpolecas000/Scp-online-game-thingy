@@ -1,4 +1,4 @@
-// SCP entity definitions
+// SCP entity definitions — 12 SCPs with positions in the containment wing
 
 export const SCPS = [
   {
@@ -10,6 +10,7 @@ export const SCPS = [
     breachChance: 0.3,
     dangerLevel: 'high',
     color: '#8B4513',
+    position: { col: 21, row: 26 },
   },
   {
     id: 'scp-049',
@@ -20,6 +21,7 @@ export const SCPS = [
     breachChance: 0.2,
     dangerLevel: 'high',
     color: '#2c2c2c',
+    position: { col: 24, row: 26 },
   },
   {
     id: 'scp-096',
@@ -30,6 +32,7 @@ export const SCPS = [
     breachChance: 0.15,
     dangerLevel: 'extreme',
     color: '#d0d0d0',
+    position: { col: 27, row: 26 },
   },
   {
     id: 'scp-106',
@@ -40,6 +43,7 @@ export const SCPS = [
     breachChance: 0.1,
     dangerLevel: 'extreme',
     color: '#3a3a3a',
+    position: { col: 30, row: 26 },
   },
   {
     id: 'scp-914',
@@ -50,6 +54,84 @@ export const SCPS = [
     breachChance: 0.05,
     dangerLevel: 'low',
     color: '#c0a060',
+    position: { col: 21, row: 29 },
+  },
+  {
+    id: 'scp-682',
+    name: 'SCP-682',
+    nickname: 'Hard-to-Destroy Reptile',
+    description: 'A large, intelligent reptilian creature that hates all life. It has survived every attempt to destroy it. Extremely dangerous.',
+    containmentZone: 'containment',
+    breachChance: 0.12,
+    dangerLevel: 'extreme',
+    color: '#4a7a3a',
+    position: { col: 24, row: 29 },
+  },
+  {
+    id: 'scp-035',
+    name: 'SCP-035',
+    nickname: 'Possessive Mask',
+    description: 'A theatrical mask that secretes a corrosive substance. When worn, it possesses the host and amplifies their worst traits.',
+    containmentZone: 'containment',
+    breachChance: 0.15,
+    dangerLevel: 'high',
+    color: '#b8860b',
+    position: { col: 27, row: 29 },
+  },
+  {
+    id: 'scp-079',
+    name: 'SCP-079',
+    nickname: 'Old AI',
+    description: 'A sentient AI from the 1970s with limited but growing intelligence. It can control electronic systems and manipulate facility infrastructure.',
+    containmentZone: 'containment',
+    breachChance: 0.1,
+    dangerLevel: 'high',
+    color: '#00ced1',
+    position: { col: 30, row: 29 },
+  },
+  {
+    id: 'scp-939',
+    name: 'SCP-939',
+    nickname: 'With Many Voices',
+    description: 'Predatory creatures that mimic human voices to lure prey. They hunt in packs and can imitate anyone they have heard.',
+    containmentZone: 'containment',
+    breachChance: 0.12,
+    dangerLevel: 'high',
+    color: '#8b0000',
+    position: { col: 21, row: 32 },
+  },
+  {
+    id: 'scp-999',
+    name: 'SCP-999',
+    nickname: 'The Tickle Monster',
+    description: 'A friendly, gelatinous orange creature that induces happiness and euphoria in those it touches. One of the few benevolent SCPs.',
+    containmentZone: 'containment',
+    breachChance: 0.03,
+    dangerLevel: 'safe',
+    color: '#ff8c00',
+    position: { col: 24, row: 32 },
+  },
+  {
+    id: 'scp-372',
+    name: 'SCP-372',
+    nickname: 'Peripheral Observer',
+    description: 'A slender, fast creature that can only be seen in peripheral vision. It stalks personnel but rarely attacks directly.',
+    containmentZone: 'containment',
+    breachChance: 0.08,
+    dangerLevel: 'medium',
+    color: '#9370db',
+    position: { col: 27, row: 32 },
+  },
+  {
+    id: 'scp-012',
+    name: 'SCP-012',
+    nickname: 'A Bad Composition',
+    description: 'A sheet of music that compels anyone who reads it to attempt to complete the score, using their own blood as ink. Always fatal.',
+    containmentZone: 'containment',
+    breachChance: 0.06,
+    dangerLevel: 'medium',
+    color: '#dc143c',
+    position: { col: 30, row: 32 },
   },
 ];
 

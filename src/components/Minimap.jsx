@@ -45,15 +45,18 @@ export default function Minimap() {
         ctx.fill();
       }
 
-      // Draw SCPs (contained = green, breached = red)
-      const containmentRoom = gameState.rooms?.find(r => r.zone === 'containment');
-      if (containmentRoom) {
-        const cx = (containmentRoom.x + containmentRoom.w / 2) * CELL_SIZE * scale;
-        const cy = (containmentRoom.y + containmentRoom.h / 2) * CELL_SIZE * scale;
-        ctx.fillStyle = gameState.breachActive ? '#e63946' : '#2d6a4f';
+      // Draw individual SCPs
+      for (const scp of gameState.scps) {
+        if (scp.worldX == null) continue;
+        ctx.fillStyle = scp.contained ? scp.color : '#ff0000';
         ctx.beginPath();
-        ctx.arc(cx, cy, 4, 0, Math.PI * 2);
+        ctx.arc(scp.worldX * scale, scp.worldZ * scale, scp.contained ? 2 : 3.5, 0, Math.PI * 2);
         ctx.fill();
+        if (!scp.contained) {
+          ctx.strokeStyle = '#ff0000';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
       }
 
       // Draw player
